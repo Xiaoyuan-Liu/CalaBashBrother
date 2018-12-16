@@ -2,6 +2,7 @@ import java.lang.*;
 import java.util.*;
 import BattleField.*;
 import Beings.*;
+import java.util.concurrent.*;
 public class Director {
 	
 	private BattleFields BFs;
@@ -22,7 +23,7 @@ public class Director {
 		//Ms =ms;
 	}
 	
-	public boolean setFormation(int x, int y, String formationName) {
+	public boolean setFormation(int x, int y, String formationName,Vector<? extends Creature>list) {
 		switch(formationName) {
 		case "鹤翼"://坐标为左上
 			if(BFs.Containable(x, y, 7, 4 )) {
@@ -173,6 +174,7 @@ public class Director {
 		//CalabashBrothers calabashbrothers = new CalabashBrothers();
 		//calabashbrothers.QueueNameStatus();
 		//calabashbrothers.QueueColorStatus();
+		/*
 		System.out.println("作业二");
 		director.QueueNameStatus();
 		director.QueueColorStatus();
@@ -188,6 +190,41 @@ public class Director {
 		director.QuickSort(0, 6);
 		director.QueueNameStatus();
 		director.QueueColorStatus();
+		*/
+		//作业三
+		//生成随机数选择阵型
+		while(true) {
+			
+			int formation = (int)Math.random()*7;
+			int x0 = (int)Math.random()*50;
+			int y0 =(int)Math.random()*50;
+			int x1 = (int)Math.random()*50;
+			int y1 =(int)Math.random()*50;
+
+			Vector<? extends Creature>MonsterList;
+			switch(formation) {
+			
+			case 1:
+				MonsterList.add(new LouLuo());
+				MonsterList.add(new LouLuo());
+				MonsterList.add(new LouLuo());
+				
+				MonsterList.add(new Scorpion());
+				
+				MonsterList.add(new LouLuo());
+				MonsterList.add(new LouLuo());
+				MonsterList.add(new LouLuo());
+			case 2:
+			case 3:
+			case 4:
+			case 5:
+			case 6:
+			case 7:
+			}
+			try{Thread.sleep(100);
+			}catch(InterruptedException e) {
+			}
+		}
 		
 	}
 	
