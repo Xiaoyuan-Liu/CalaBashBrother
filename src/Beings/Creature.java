@@ -28,4 +28,10 @@ public class Creature extends Beings{
 		else
 			attackedBeing.HP  = attackedBeing.HP - (this.getCE(radio) - attackedBeing.DEF);
 	}
+	public int getCE(int radio) {
+		if(Motivated)
+			return CE * radio;
+		else
+			return CE;
+	}
 }

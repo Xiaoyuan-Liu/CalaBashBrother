@@ -22,7 +22,7 @@
 ## 攻击波
 生物攻击时，会发出攻击波，攻击波在场地中飞行，每秒飞行一距离。遇到第一个敌人时产生效果并结束。
 # 二、场地
-##区域
+## 区域
 ## 阵型
 作战前首先要摆放阵型。每个阵营只能在自己的阵地摆放阵型，每个阵型将占有能够容纳它的最小的矩形，例如鹤翼阵需要占用7*4大小的矩形。\
 摆放时，接收一个坐标输入(x,y)，指示上述矩形的中心位置，根据中心位置判断能够在本阵营区域摆放阵型。
@@ -32,3 +32,191 @@
 妖怪有八种阵型——鹤翼、雁行、衡轭、长蛇、鱼鳞、方门、偃月和锋矢。其中蝎子精处于阵型最中央，身先士卒，勇气可嘉，阵型的其他位置都是小喽啰。蛇精也可以摆放在场地的任何位置（同样的如果你不想她死那么快就请把她放在妖怪们身后）
 # 三、GUI
 # 四、Multithreading
+# 五、类及类间关系
+#### package Beings
+Beings.java
+```javascript
+package Beings;
+
+//本类是生物和攻击波的父类
+public class Beings {
+    //坐标
+	protected int x, y;
+	//移动
+	public void MoveToPos(int x, int y)
+}
+```
+
+Creature.java
+```javascript
+//本类是葫芦娃、爷爷、蝎子精、蛇精、小喽啰的父类，是Beings的派生类
+package Beings;
+public class Creature extends Beings{
+    //攻击力Combat Effectiveness
+	protected int CE;
+    //防御力Defence
+	protected int DEF;
+    //血量Health Point
+	protected int HP;
+    //buff状态
+	protected boolean Motivated;
+    //存活状态
+	protected boolean livingStatus;
+    //取攻击力
+    public int getCE(int radio);
+	//取防御力
+    public int getDEF();
+	//取血量
+    public int getHP();
+    //取buff状态
+	public boolean isMotivated();
+    //取存活状态
+	public boolean isLiving();
+    //设置buff状态
+	public void setMotivated(boolean Motivated);
+    //攻击
+	public void Attack(Creature attackedBeing,int radio);
+}
+```
+
+CalaBashBrother.java
+```javascript
+package Beings;
+enum NameAndColor {//
+	RED, ORANGE, YELLOW, GREEN, CYAN, BLUE, PURPLE;
+	String[] NAME = {"老大", "老二", "老三", "老四", "老五", "老六", "老七"};
+	String[] COLOR = {"赤", "橙", "黄", "绿", "青", "蓝", "紫"};
+	//取名字
+    String getName() ;
+	//取颜色
+    String getColor();
+}
+public class CalabashBrother extends Creature{
+
+	private NameAndColor nc;
+    //默认构造函数
+	CalabashBrother();
+    //带参构造函数
+	CalabashBrother(NameAndColor NC);
+	CalabashBrother(int x, int y);
+	CalabashBrother(int x, int y, NameAndColor NC);
+	//取名字
+    public String getName();
+	//取颜色
+    public String getColor();
+	//设置颜色和名字，对应上面的enum类型
+    public void setNameAndColor(int index);
+    //比较函数，用于作业二排序
+	public int compareTo(CalabashBrother brother);
+}
+```
+
+CalabashBrothers.java
+
+```javascript
+package Beings;
+public class CalabashBrothers {
+    //七个葫芦兄弟
+	private CalabashBrother[] calabashbrothers;
+    //默认构造函数
+	public CalabashBrothers();//设置位置
+	public void SetCBPostion(int index, int x, int y);
+	//作业二排序交换位置
+	public void SwapBrother(int index1, int index2);
+    //取index位置的葫芦娃
+	public CalabashBrother getBrother(int index);
+    //取index位置的葫芦娃的名字
+	public String getName(int index);
+    //取index位置的葫芦娃名字
+	public String getColor(int index);
+    //作业二输出当前葫芦兄弟队的情况
+	public void QueueNameStatus();
+	public void QueueColorStatus();
+    //作业二打乱葫芦兄弟队伍
+	public void Disorder();
+}
+
+```
+
+GrandPa.java
+```javascript
+package Beings;
+public class GrandPa extends Creature{
+
+}
+```
+
+Scorpion.java
+```javascript
+package Beings;
+//蝎子精
+public class Scorpion extends Creature{
+
+}
+```
+
+Snake.java
+```javascript
+package Beings;
+
+public class Snake extends Creature{
+
+}
+
+```
+
+LouLuo.java
+```javascript
+package Beings;
+public class LouLuo extends Creature{
+
+}
+
+```
+#### package BattleField
+BattleField.java
+```javascript
+//泛型，可存放所有物体
+package BattleField;
+import Beings.*;
+public class BattleField<T extends Beings> {
+    //本块场地中的物体
+	private T Being;
+    //默认构造函数
+	BattleField();
+    //带参构造函数
+	BattleField(T t);
+    //查看格子是否为空
+	public boolean isEmpty()；
+    //取得本格子上的物体
+	public T getBeing()；
+    //把格子上的物体移走
+	public T removeBeing()；
+    //在格子上放上物体。已内嵌removeBeing方法
+	public boolean setBeing(T t)；
+}
+```
+
+BattleFields.java
+```javascript
+package BattleField;
+import java.util.*;
+import Beings.*;
+public class BattleFields {//战场为M*N的矩形
+	//version 1.0
+    //场地长
+	private int M;
+	//场地宽
+    private int N;
+    //场地
+	private  BattleField BFs[][];
+	private ArrayList<BattleField<? extends Beings>> BF = new ArrayList<>();
+    //默认构造函数
+	public BattleFields();
+    //带参构造函数
+	BattleFields(int m, int n);
+	public boolean Containable(int x, int y, int length, int height);
+	public boolean SetBFPosition(int x, int y, BattleField<? extends Beings> t);
+
+}
+```
