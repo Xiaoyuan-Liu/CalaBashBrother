@@ -5,6 +5,20 @@ public class Creature extends Beings{
 	protected int HP;//Health Point
 	protected boolean Motivated;
 	protected boolean livingStatus;
+	Creature(int CE, int DEF, int HP){
+		this.CE = CE;
+		this.DEF = DEF;
+		this.HP = HP;
+		Motivated = false;
+		livingStatus = true;
+	}
+	Creature(int CE, int DEF, int HP, boolean Motivated){
+		this.CE = CE;
+		this.DEF = DEF;
+		this.HP = HP;
+		this.Motivated = Motivated;
+		livingStatus = false;
+	}
 	public int getDEF() {
 		return DEF;
 	}

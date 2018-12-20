@@ -17,21 +17,26 @@ public class CalabashBrother extends Creature{
 	//private int DEF;//Defence
 	//private int HP;//Health Point
 	CalabashBrother(){
+		super(30,15,100);
 		x = -1;
 		y = -1;
 		nc = null;
+		
 	}
 	CalabashBrother(NameAndColor NC){
+		super(30,15,100);
 		x = -1;
 		y = -1;
 		nc = NC;
 	}
 	CalabashBrother(int x, int y){
+		super(30,15,100);
 		this.x = x;
 		this.y = y;
 		nc = null;
 	}
 	CalabashBrother(int x, int y, NameAndColor NC){
+		super(30,15,100);
 		this.x = x;
 		this.y = y;
 		nc = NC;
