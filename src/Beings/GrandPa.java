@@ -1,6 +1,6 @@
 package Beings;
 public class GrandPa extends Creature{
-	GrandPa(){
+	public GrandPa(){
 		super(0,10,100);
 	}
 }

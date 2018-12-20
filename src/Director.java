@@ -22,10 +22,19 @@ public class Director {
 		CBs = cbs;
 		//Ms =ms;
 	}
+	public boolean setFormation(int x, int y, int biasY, Creature t) {
+	
+		if(BFs.Containable(x, y, 1, 1)) {
+			BFs.SetBFPosition(x, y, t);
+			return true;
+		}
+		return false;
+	}
 	public boolean setFormation(int x, int y, int biasY, String formationName,Vector<Creature>list) {
+		
 		switch(formationName) {
 		case "鹤翼"://坐标为左上
-			if(BFs.Containable(x, y, 4, 7, biasY)) {
+			if(BFs.Containable(x, y, 4, 7)) {
 				list.get(0).MoveToPos(x, y);
 				BFs.SetBFPosition(x, y, list.get(0));
 				list.get(1).MoveToPos(x+1, y+1);
@@ -44,7 +53,7 @@ public class Director {
 			}
 			else return false;
 		case "雁行"://坐标为左上
-			if(BFs.Containable(x, y, 5, 5, biasY)) {
+			if(BFs.Containable(x, y, 5, 5)) {
 				list.get(0).MoveToPos(x + 4, y);
 				BFs.SetBFPosition(x+4, y, list.get(0));
 				list.get(1).MoveToPos(x+3, y+1);
@@ -61,7 +70,7 @@ public class Director {
 
 		case "衡轭"://坐标为左上
 
-			if(BFs.Containable(x, y, 6, 2, biasY)) {
+			if(BFs.Containable(x, y, 6, 2)) {
 				list.get(0).MoveToPos(x, y+1);
 				BFs.SetBFPosition(x, y+1, list.get(0));
 				list.get(1).MoveToPos(x+1, y);
@@ -79,7 +88,7 @@ public class Director {
 			else return false;
 
 		case "长蛇"://坐标为上
-			if(BFs.Containable(x, y, 6, 1, biasY)) {
+			if(BFs.Containable(x, y, 6, 1)) {
 				list.get(0).MoveToPos(x, y);
 				BFs.SetBFPosition(x, y, list.get(0));
 				list.get(1).MoveToPos(x+1, y);
@@ -97,7 +106,7 @@ public class Director {
 			else return false;
 
 		case "鱼鳞"://左上
-			if(BFs.Containable(x, y, 5, 5, biasY)) {
+			if(BFs.Containable(x, y, 5, 5)) {
 				list.get(0).MoveToPos(x, y+2);
 				BFs.SetBFPosition(x, y+2, list.get(0));
 				list.get(1).MoveToPos(x+1, y+3);
@@ -123,7 +132,7 @@ public class Director {
 			else return false;
 
 		case "方门"://坐标同上
-			if(BFs.Containable(x, y, 5, 5, biasY)) {
+			if(BFs.Containable(x, y, 5, 5)) {
 				list.get(0).MoveToPos(x, y+2);
 				BFs.SetBFPosition(x, y+2, list.get(0));
 				list.get(1).MoveToPos(x+1, y+1);
@@ -146,7 +155,7 @@ public class Director {
 
 		case "偃月"://同上
 			
-			if(BFs.Containable(x, y, 4, 9, biasY)) {
+			if(BFs.Containable(x, y, 4, 9)) {
 				list.get(0).MoveToPos(x+3, y);
 				BFs.SetBFPosition(x+3, y, list.get(0));
 				list.get(1).MoveToPos(x+4, y);
@@ -190,7 +199,7 @@ public class Director {
 			else return false;
 
 		case "锋矢":
-			if(BFs.Containable(x, y, 6, 5, biasY)) {
+			if(BFs.Containable(x, y, 6, 5)) {
 				list.get(0).MoveToPos(x, y+1);
 				BFs.SetBFPosition(x, y+1, list.get(0));
 				list.get(1).MoveToPos(x, y+2);
@@ -323,6 +332,7 @@ public class Director {
 	public static void main(String[] args) {
 		//BattleFields battlefields = new BattleFields();
 		Director director = new Director(new BattleFields(),new CalabashBrothers());//, new Monsters());
+		
 		//作业2
 		//CalabashBrothers calabashbrothers = new CalabashBrothers();
 		//calabashbrothers.QueueNameStatus();
@@ -344,157 +354,173 @@ public class Director {
 		director.QueueNameStatus();
 		director.QueueColorStatus();
 		*/
+		
 		//作业三
-		//生成随机数选择阵型
-		//while(true) {
+		//葫芦娃以长蛇阵放在阵地中
+		int x0,y0;
+		Vector<Creature>CBList = new Vector<Creature>();
+		CBList.add(director.getBrother(0));
+		CBList.add(director.getBrother(1));
+		CBList.add(director.getBrother(2));
+		CBList.add(director.getBrother(3));
+		CBList.add(director.getBrother(4));
+		CBList.add(director.getBrother(5));
+		CBList.add(director.getBrother(6));
+		do {
+			x0 = Randomnum.getRandom(20);
+			y0 =Randomnum.getRandom(10);
+			director.QuickSort(0, 6);
+			System.out.println(CBList.size());
+		}while(!director.setFormation(x0, y0, 0, "长蛇", CBList));
 			
-			int formation = Randomnum.getRandom(7);
-			//if(formation == 3)continue;
-			int x0,y0;
-			Vector<Creature>CBList = new Vector<Creature>();
-			CBList.add(director.getBrother(0));
-			CBList.add(director.getBrother(1));
-			CBList.add(director.getBrother(2));
-			CBList.add(director.getBrother(3));
-			CBList.add(director.getBrother(4));
-			CBList.add(director.getBrother(5));
-			CBList.add(director.getBrother(6));
-			do {
-				x0 = Randomnum.getRandom(20);
-				y0 =Randomnum.getRandom(10);
-				director.QuickSort(0, 6);
-				System.out.println(CBList.size());
-			}while(!director.setFormation(x0, y0, 0, "长蛇", CBList));
-			int x1,y1;
-			String formationName = null;
-			Vector<Creature>MonsterList = new Vector<Creature>();
-			do {
-				MonsterList.clear();
-				x1 = Randomnum.getRandom(20);
-				y1 =Randomnum.getRandom(10) + 10;
-				switch(formation) {
-				
-				case 0:
-					MonsterList.add(new LouLuo());
-					MonsterList.add(new LouLuo());
-					MonsterList.add(new LouLuo());
-				
-					MonsterList.add(new Scorpion());
-				
-					MonsterList.add(new LouLuo());
-					MonsterList.add(new LouLuo());
-					MonsterList.add(new LouLuo());
-					formationName = new String("鹤翼");
-					//director.setFormation(x1, y1, "鹤翼", MonsterList);
-					break;
-				
-				case 1:
-					MonsterList.add(new LouLuo());
-					MonsterList.add(new LouLuo());
-				
-					MonsterList.add(new Scorpion());
-				
-					MonsterList.add(new LouLuo());
-					MonsterList.add(new LouLuo());
-					formationName = new String("雁行");
-					//director.setFormation(x1, y1, "雁行", MonsterList);
-					break;
-				case 2:
-					MonsterList.add(new LouLuo());
-					MonsterList.add(new LouLuo());
-					MonsterList.add(new LouLuo());
-				
-					MonsterList.add(new Scorpion());
-				
-					MonsterList.add(new LouLuo());
-					MonsterList.add(new LouLuo());
-					formationName = new String("衡轭");
-					//director.setFormation(x1, y1, "衡轭", MonsterList);
-					break;
-			/*case 3:
+		//放置爷爷	
+		GrandPa g = new GrandPa();
+		do {
+			x0 = Randomnum.getRandom(20);
+			y0 =Randomnum.getRandom(10);
+		}while(!director.setFormation(x0, y0, 0, g));
+		
+		
+		
+		//放置蝎子精和小喽啰
+		int x1,y1;
+		int formation = Randomnum.getRandom(7);//生成随机数选择阵型
+		String formationName = null;
+		Vector<Creature>MonsterList = new Vector<Creature>();
+		do {
+			MonsterList.clear();
+			x1 = Randomnum.getRandom(20);
+			y1 =Randomnum.getRandom(10) + 10;
+			switch(formation) {
+			
+			case 0:
 				MonsterList.add(new LouLuo());
 				MonsterList.add(new LouLuo());
-				
+				MonsterList.add(new LouLuo());
+			
 				MonsterList.add(new Scorpion());
-				
+			
 				MonsterList.add(new LouLuo());
 				MonsterList.add(new LouLuo());
 				MonsterList.add(new LouLuo());
-				director.setFormation(x1, y1, "长蛇", MonsterList);
+				formationName = new String("鹤翼");
+				//director.setFormation(x1, y1, "鹤翼", MonsterList);
 				break;
-			*/
-				case 3:
-					MonsterList.add(new LouLuo());
-					MonsterList.add(new LouLuo());
-					MonsterList.add(new LouLuo());
-					MonsterList.add(new LouLuo());
-					MonsterList.add(new LouLuo());
-					MonsterList.add(new LouLuo());	
-					MonsterList.add(new LouLuo());
-					MonsterList.add(new LouLuo());
-					MonsterList.add(new LouLuo());
-					MonsterList.add(new Scorpion());
-					formationName = new String("鱼鳞");
-					//director.setFormation(x1, y1, "鱼鳞", MonsterList);
-					break;
-				case 4:
-					MonsterList.add(new LouLuo());
-					MonsterList.add(new LouLuo());
-					MonsterList.add(new LouLuo());
-					MonsterList.add(new Scorpion());
-					MonsterList.add(new LouLuo());
-					MonsterList.add(new LouLuo());
-					MonsterList.add(new LouLuo());
-					MonsterList.add(new LouLuo());
-					formationName = new String("方门");
-					//director.setFormation(x1, y1, "方门", MonsterList);
-					break;
-				case 5:
-					MonsterList.add(new LouLuo());
-					MonsterList.add(new Scorpion());
-					MonsterList.add(new LouLuo());
-					MonsterList.add(new LouLuo());
-					MonsterList.add(new LouLuo());
-					MonsterList.add(new LouLuo());
-					MonsterList.add(new LouLuo());
-					MonsterList.add(new LouLuo());
-					MonsterList.add(new LouLuo());
-					MonsterList.add(new LouLuo());
-					MonsterList.add(new LouLuo());
-					MonsterList.add(new LouLuo());
-					MonsterList.add(new LouLuo());
-					MonsterList.add(new LouLuo());
-					MonsterList.add(new LouLuo());
-					MonsterList.add(new LouLuo());
-					MonsterList.add(new LouLuo());
-					MonsterList.add(new LouLuo());
-					MonsterList.add(new LouLuo());
-					formationName = new String("偃月");
-					//director.setFormation(x1, y1, "偃月", MonsterList);
-					break;
-				case 6:
-					MonsterList.add(new LouLuo());
-					MonsterList.add(new Scorpion());
-					MonsterList.add(new LouLuo());
-					MonsterList.add(new LouLuo());
-					MonsterList.add(new LouLuo());
-					MonsterList.add(new LouLuo());
-					MonsterList.add(new LouLuo());
-					MonsterList.add(new LouLuo());
-					MonsterList.add(new LouLuo());
-					MonsterList.add(new LouLuo());
-					MonsterList.add(new LouLuo());
-					MonsterList.add(new LouLuo());
-					formationName = new String("锋矢");
-					//director.setFormation(x1, y1, "锋矢", MonsterList);
-					break;
-				
-			}
-			}while(!director.setFormation(x1, y1, 10, formationName, MonsterList));
-			director.showBF();
-			//try{Thread.sleep(10000);
-			//}catch(InterruptedException e) {
-			//}
+			
+			case 1:
+				MonsterList.add(new LouLuo());
+				MonsterList.add(new LouLuo());
+			
+				MonsterList.add(new Scorpion());
+			
+				MonsterList.add(new LouLuo());
+				MonsterList.add(new LouLuo());
+				formationName = new String("雁行");
+				//director.setFormation(x1, y1, "雁行", MonsterList);
+				break;
+			case 2:
+				MonsterList.add(new LouLuo());
+				MonsterList.add(new LouLuo());
+				MonsterList.add(new LouLuo());
+			
+				MonsterList.add(new Scorpion());
+			
+				MonsterList.add(new LouLuo());
+				MonsterList.add(new LouLuo());
+				formationName = new String("衡轭");
+				//director.setFormation(x1, y1, "衡轭", MonsterList);
+				break;
+		/*case 3:
+			MonsterList.add(new LouLuo());
+			MonsterList.add(new LouLuo());
+			
+			MonsterList.add(new Scorpion());
+			
+			MonsterList.add(new LouLuo());
+			MonsterList.add(new LouLuo());
+			MonsterList.add(new LouLuo());
+			director.setFormation(x1, y1, "长蛇", MonsterList);
+			break;
+		*/
+			case 3:
+				MonsterList.add(new LouLuo());
+				MonsterList.add(new LouLuo());
+				MonsterList.add(new LouLuo());
+				MonsterList.add(new LouLuo());
+				MonsterList.add(new LouLuo());
+				MonsterList.add(new LouLuo());	
+				MonsterList.add(new LouLuo());
+				MonsterList.add(new LouLuo());
+				MonsterList.add(new LouLuo());
+				MonsterList.add(new Scorpion());
+				formationName = new String("鱼鳞");
+				//director.setFormation(x1, y1, "鱼鳞", MonsterList);
+				break;
+			case 4:
+				MonsterList.add(new LouLuo());
+				MonsterList.add(new LouLuo());
+				MonsterList.add(new LouLuo());
+				MonsterList.add(new Scorpion());
+				MonsterList.add(new LouLuo());
+				MonsterList.add(new LouLuo());
+				MonsterList.add(new LouLuo());
+				MonsterList.add(new LouLuo());
+				formationName = new String("方门");
+				//director.setFormation(x1, y1, "方门", MonsterList);
+				break;
+			case 5:
+				MonsterList.add(new LouLuo());
+				MonsterList.add(new Scorpion());
+				MonsterList.add(new LouLuo());
+				MonsterList.add(new LouLuo());
+				MonsterList.add(new LouLuo());
+				MonsterList.add(new LouLuo());
+				MonsterList.add(new LouLuo());
+				MonsterList.add(new LouLuo());
+				MonsterList.add(new LouLuo());
+				MonsterList.add(new LouLuo());
+				MonsterList.add(new LouLuo());
+				MonsterList.add(new LouLuo());
+				MonsterList.add(new LouLuo());
+				MonsterList.add(new LouLuo());
+				MonsterList.add(new LouLuo());
+				MonsterList.add(new LouLuo());
+				MonsterList.add(new LouLuo());
+				MonsterList.add(new LouLuo());
+				MonsterList.add(new LouLuo());
+				formationName = new String("偃月");
+				//director.setFormation(x1, y1, "偃月", MonsterList);
+				break;
+			case 6:
+				MonsterList.add(new LouLuo());
+				MonsterList.add(new Scorpion());
+				MonsterList.add(new LouLuo());
+				MonsterList.add(new LouLuo());
+				MonsterList.add(new LouLuo());
+				MonsterList.add(new LouLuo());
+				MonsterList.add(new LouLuo());
+				MonsterList.add(new LouLuo());
+				MonsterList.add(new LouLuo());
+				MonsterList.add(new LouLuo());
+				MonsterList.add(new LouLuo());
+				MonsterList.add(new LouLuo());
+				formationName = new String("锋矢");
+				//director.setFormation(x1, y1, "锋矢", MonsterList);
+				break;
+			
+		}
+		}while(!director.setFormation(x1, y1, 10, formationName, MonsterList));
+		//放置蛇精
+		Snake S = new Snake();
+		do {
+			x1 = Randomnum.getRandom(20);
+			y1 =Randomnum.getRandom(10)+10;
+		}while(!director.setFormation(x1, y1, 10, S));
+		System.out.println(x1+" "+y1);
+		director.showBF();
+		//try{Thread.sleep(10000);
+		//}catch(InterruptedException e) {
+		//}
 		//}
 
 		

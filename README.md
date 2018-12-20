@@ -23,13 +23,22 @@
 生物攻击时，会发出攻击波，攻击波在场地中飞行，每秒飞行一距离。遇到第一个敌人时产生效果并结束。
 # 二、场地
 ## 区域
+作战场地为默认为20\*20的正方形，初始时，葫芦兄弟阵营站在左侧20\*10的矩形中，妖怪阵营站在右侧，当战斗开始时，两阵营人物可在整个阵地（包括己方和对方阵地）上自由走动。
 ## 阵型
 作战前首先要摆放阵型。每个阵营只能在自己的阵地摆放阵型，每个阵型将占有能够容纳它的最小的矩形，例如鹤翼阵需要占用7*4大小的矩形。\
-摆放时，接收一个坐标输入(x,y)，指示上述矩形的中心位置，根据中心位置判断能够在本阵营区域摆放阵型。
+摆放时，接收一个坐标输入(x,y)，指示上述矩形的左上角位置，根据左上角位置和矩形大小判断能够在本阵营区域摆放阵型。
 #### 1、葫芦兄弟
 葫芦兄弟只有一个阵型——长蛇阵，爷爷自己一个阵型，可以摆放在任意位置（如果你不想他死那么快就请把他放在葫芦娃身后）
 #### 2、妖怪
 妖怪有八种阵型——鹤翼、雁行、衡轭、长蛇、鱼鳞、方门、偃月和锋矢。其中蝎子精处于阵型最中央，身先士卒，勇气可嘉，阵型的其他位置都是小喽啰。蛇精也可以摆放在场地的任何位置（同样的如果你不想她死那么快就请把她放在妖怪们身后）
+## 摆阵
+**葫芦兄弟**团结一线，总是摆出一字长蛇阵，共同面对敌人，将葫芦七兄弟按照作业二排序后，随机生成一个葫芦兄弟阵地的坐标，检测从该坐标起向下沿伸（沿x坐标增大的方向），如果能放下，则将葫芦兄弟放置在战场上，否则再次生成随机坐标，重复上述步骤。
+**爷爷**在葫芦兄弟上场后登场，随机生成一个葫芦兄弟阵地的坐标，检测该位置，如果没有葫芦娃，则在此放下爷爷，否则重新生成随机坐标，重复上述操作。
+**蝎子精**带领**小喽啰**先排阵型。随机选择一个阵型后，生成相应数量的蝎子精和小喽啰，按照阵型个体摆放顺序放置在一个向量Vector中，之后随机生成一个妖怪阵营阵地的坐标，检测以该坐标为阵型所占最小矩形的左上角，能否在阵地中放置该阵型，能容纳则摆放该阵型，如果不能则重新生成随即坐标重复上述步骤。
+**蛇精**的放置方式与**爷爷**相同，不做赘述。
+## _作业三_
+按照上述步骤在阵地中摆放好两阵营人物后，输出阵地情况，阵地中空位用*表示，葫芦兄弟用C表示，爷爷用G表示，小喽啰用L表示，蝎子精用大写S表示，蛇精用小写s表示。如下是某次程序运行结果。
+![Alt](1.png)
 # 三、GUI
 # 四、Multithreading
 # 五、类及类间关系
@@ -142,7 +151,8 @@ GrandPa.java
 ```javascript
 package Beings;
 public class GrandPa extends Creature{
-
+	//构造函数
+	public GrandPa();
 }
 ```
 
@@ -151,7 +161,8 @@ Scorpion.java
 package Beings;
 //蝎子精
 public class Scorpion extends Creature{
-
+	//构造函数
+	public Scorpion();
 }
 ```
 
@@ -160,7 +171,8 @@ Snake.java
 package Beings;
 
 public class Snake extends Creature{
-
+	//构造函数
+	public Snake();
 }
 
 ```
@@ -169,7 +181,8 @@ LouLuo.java
 ```javascript
 package Beings;
 public class LouLuo extends Creature{
-
+	//构造函数
+	public LouLuo();
 }
 
 ```
@@ -203,7 +216,6 @@ package BattleField;
 import java.util.*;
 import Beings.*;
 public class BattleFields {//战场为M*N的矩形
-	//version 1.0
     //场地长
 	private int M;
 	//场地宽
@@ -215,8 +227,72 @@ public class BattleFields {//战场为M*N的矩形
 	public BattleFields();
     //带参构造函数
 	BattleFields(int m, int n);
+    //作业三，场地能否容纳阵型
 	public boolean Containable(int x, int y, int length, int height);
-	public boolean SetBFPosition(int x, int y, BattleField<? extends Beings> t);
+    //在战场(x,y)位置放置物体t
+	public boolean SetBFPosition(int x, int y, Beings t);
+	//输出战场情况
+	public void BFOutput();
 
+}
+```
+#### default package
+Director.java
+```javascript
+import java.lang.*;
+import java.util.*;
+import BattleField.*;
+import Beings.*;
+import java.util.concurrent.*;
+public class Director {
+	//战场
+	private BattleFields BFs;
+	//葫芦兄弟们。这个对象实际上已经没有用了，是作业二的遗产代码
+	private CalabashBrothers CBs;
+	//默认构造函数
+	Director()；
+	//带参构造函数
+	Director(BattleFields bfs)；
+	//带参构造函数
+	Director(BattleFields bfs, CalabashBrothers cbs)；
+	//在某位置摆放。两个重载，第一个是摆放爷爷和蛇精，第二个是摆放葫芦兄弟和蝎子精与小喽啰们，他们储存在Vector向量中
+	public boolean setFormation(int x, int y, int biasY, Creature t)；
+	public boolean setFormation(int x, int y, int biasY, String formationName,Vector<Creature>list)；
+	
+	//输出名字状态。两个重载
+	public void QueueNameStatus()；
+	public void QueueNameStatus(CalabashBrothers calabashbrothers)；
+	
+	//输出颜色状态。两个重载
+	public void QueueColorStatus()；
+	public void QueueColorStatus(CalabashBrothers calabashbrothers)；
+	
+	//冒泡排序。两个重载
+	public void BubbleSort();
+	public static void BubbleSort(CalabashBrothers calabashbrothers);
+	
+	//快速排序。两个重载
+	private int Partition(int p, int r);
+	public void QuickSort(int p, int r);
+	
+	private static int Partition(CalabashBrothers calabashbrothers, int p, int r);
+	public static void QuickSort(CalabashBrothers calabashbrothers, int p, int r);
+	//将葫芦娃的顺序打乱
+	public void Disorder();
+	public CalabashBrother getBrother(int index);
+	//显示战场情况
+	public void showBF();
+	//主函数
+	public static void main(String[] args);
+	
+}
+```
+```javascript
+import java.util.Random;
+public class Randomnum {
+	//Random类。只在第一次初始化
+	static Random r = new Random();
+	//产生一个在[0,upline)范围内的随机整数
+	public static int getRandom(int upLine);
 }
 ```

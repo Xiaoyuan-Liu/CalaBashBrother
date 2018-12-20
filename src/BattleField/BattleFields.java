@@ -34,7 +34,7 @@ public class BattleFields {//战场为M*N的矩形
 
 
 	}
-	public boolean Containable(int x, int y, int SizeX, int SizeY,int biasY) {
+	public boolean Containable(int x, int y, int SizeX, int SizeY) {
 		if(((x + SizeX) <= M) && ((y + SizeY) <= N) && ((x + SizeX) >=0 ) && ((y + SizeY) >=0))return true;
 		else return false;
 	}
@@ -42,10 +42,10 @@ public class BattleFields {//战场为M*N的矩形
 		
 		return true;
 	}
-	public boolean SetBFPosition(int x, int y, Creature t) {
+	public boolean SetBFPosition(int x, int y, Beings t) {
 		if(BFs[x][y]!=null)return false;
 		else {
-			BFs[x][y]=new BattleField<Creature>(t);
+			BFs[x][y]=new BattleField<Beings>(t);
 			return true;
 		}
 		
@@ -57,19 +57,19 @@ public class BattleFields {//战场为M*N的矩形
 				else{
 					Beings t = BFs[i][j].getBeing();
 					if(t instanceof CalabashBrother) {
-						System.out.print("c ");
+						System.out.print("C ");
 					}
 					else if(t instanceof LouLuo){
-						System.out.print("l ");
+						System.out.print("L ");
 					}
 					else if(t instanceof GrandPa) {
-						System.out.print("g ");
+						System.out.print("G ");
 					}
 					else if(t instanceof Scorpion) {
-						System.out.print("s ");
+						System.out.print("S ");
 					}
 					else if(t instanceof Snake) {
-						System.out.print("S ");
+						System.out.print("s ");
 					}
 				}
 			}
