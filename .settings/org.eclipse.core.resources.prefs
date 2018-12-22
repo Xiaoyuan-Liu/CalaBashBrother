@@ -1,9 +1,4 @@
 eclipse.preferences.version=1
-encoding//src/BattleField/BattleField.java=UTF-8
-encoding//src/BattleField/BattleFields.java=UTF-8
-encoding//src/Beings/Beings.java=UTF-8
-encoding//src/Beings/CalabashBrother.java=UTF-8
-encoding//src/Beings/CalabashBrothers.java=UTF-8
-encoding//src/Beings/Creature.java=UTF-8
-encoding//src/Beings/GrandPa.java=UTF-8
-encoding//src/Director.java=UTF-8
+encoding//src/main/java=UTF-8
+encoding//src/test/java=UTF-8
+encoding/<project>=UTF-8
