@@ -6,7 +6,8 @@ import java2018.CalabashBrother.Randomnum.*;
 import java2018.CalabashBrother.application.*;
 import java2018.CalabashBrother.GameGUI.*;
 public class Director {
-	
+	private int goodboyCount = 8;
+	private int badboyCount = 0;
 	private BattleFields BFs;
 	private CalabashBrothers CBs;
 	//private Monsters Ms;
@@ -51,6 +52,7 @@ public class Director {
 				BFs.SetBFPosition(x+1, y+5, list.get(5));
 				list.get(6).MoveToPos(x, y+6);
 				BFs.SetBFPosition(x, y+6, list.get(6));
+
 				return true;
 			}
 			else return false;
@@ -90,7 +92,7 @@ public class Director {
 			else return false;
 
 		case "长蛇"://坐标为上
-			if(BFs.Containable(x, y, 6, 1)) {
+			if(BFs.Containable(x, y, 7, 1)) {
 				list.get(0).MoveToPos(x, y);
 				BFs.SetBFPosition(x, y, list.get(0));
 				list.get(1).MoveToPos(x+1, y);
@@ -103,6 +105,8 @@ public class Director {
 				BFs.SetBFPosition(x+4, y, list.get(4));
 				list.get(5).MoveToPos(x+5, y);
 				BFs.SetBFPosition(x+5, y, list.get(5));
+				list.get(6).MoveToPos(x+6, y);
+				BFs.SetBFPosition(x+6, y, list.get(6));
 				return true;
 			}
 			else return false;
@@ -354,12 +358,13 @@ public class Director {
 			QuickSort(0, 6);
 			System.out.println(CBList.size());
 		}while(!setFormation(x0, y0, 0, "长蛇", CBList));
-			
+		CBs.QueueNameStatus();
 		//放置爷爷	
 		GrandPa g = new GrandPa();
 		do {
 			x0 = Randomnum.getRandom(10);
 			y0 =Randomnum.getRandom(10);
+			g.MoveToPos(x0, y0);
 		}while(!setFormation(x0, y0, 0, g));
 		
 		
@@ -387,6 +392,7 @@ public class Director {
 				MonsterList.add(new LouLuo());
 				formationName = new String("鹤翼");
 				//director.setFormation(x1, y1, "鹤翼", MonsterList);
+				badboyCount = 8;
 				break;
 			
 			case 1:
@@ -398,6 +404,7 @@ public class Director {
 				MonsterList.add(new LouLuo());
 				MonsterList.add(new LouLuo());
 				formationName = new String("雁行");
+				badboyCount = 6;
 				//director.setFormation(x1, y1, "雁行", MonsterList);
 				break;
 			case 2:
@@ -410,6 +417,7 @@ public class Director {
 				MonsterList.add(new LouLuo());
 				MonsterList.add(new LouLuo());
 				formationName = new String("衡轭");
+				badboyCount = 7;
 				//director.setFormation(x1, y1, "衡轭", MonsterList);
 				break;
 		/*case 3:
@@ -436,6 +444,7 @@ public class Director {
 				MonsterList.add(new LouLuo());
 				MonsterList.add(new Scorpion());
 				formationName = new String("鱼鳞");
+				badboyCount = 11;
 				//director.setFormation(x1, y1, "鱼鳞", MonsterList);
 				break;
 			case 4:
@@ -448,6 +457,7 @@ public class Director {
 				MonsterList.add(new LouLuo());
 				MonsterList.add(new LouLuo());
 				formationName = new String("方门");
+				badboyCount = 9;
 				//director.setFormation(x1, y1, "方门", MonsterList);
 				break;
 			case 5:
@@ -471,6 +481,7 @@ public class Director {
 				MonsterList.add(new LouLuo());
 				MonsterList.add(new LouLuo());
 				formationName = new String("偃月");
+				badboyCount = 20;
 				//director.setFormation(x1, y1, "偃月", MonsterList);
 				break;
 			case 6:
@@ -487,6 +498,7 @@ public class Director {
 				MonsterList.add(new LouLuo());
 				MonsterList.add(new LouLuo());
 				formationName = new String("锋矢");
+				badboyCount = 13;
 				//director.setFormation(x1, y1, "锋矢", MonsterList);
 				break;
 			
@@ -499,8 +511,17 @@ public class Director {
 		do {
 			x1 = Randomnum.getRandom(10);
 			y1 =Randomnum.getRandom(10)+10;
+			S.MoveToPos(x1, y1);
 		}while(!setFormation(x1, y1, 10, S));
+		for(int i = 0; i < 10;i++) {
+			for(int j = 0; j < 20;j++) {
+				if(!BFs.isEmpty(i, j)) {
+					BFs.getCreature(i, j).setBFs(BFs);
+				}
+			}
+		}
 		System.out.println(x1+" "+y1);
+
 		showBF();
 		//new UI().initiaize();//mainUI.showBF(director.getBFs());
 		//try{Thread.sleep(10000);

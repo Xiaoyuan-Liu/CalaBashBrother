@@ -1,7 +1,7 @@
 
 package java2018.CalabashBrother.BattleField;
 import java2018.CalabashBrother.Beings.*;
-public class BattleField<T extends Beings> {
+public class BattleField<T extends Creature> {
 
 	private T Being;
 	BattleField(){
@@ -10,25 +10,15 @@ public class BattleField<T extends Beings> {
 	BattleField(T t){
 		Being = t;
 	}
-	public boolean isEmpty() {
-		return Being == null;
-	}
 	public T getBeing() {
 		return Being;
+	}
+	public Creature getCreature() {
+		return (Creature)Being;
 	}
 	public T removeBeing() {
 		T res = Being;
 		Being = null;
 		return res;
-	}
-	public boolean setBeing(T t) {//使用前必须先调用removeBeing()方法，此处为了防止忘记调用，内嵌了调用
-		//???真的要先调用remove吗？还没想清楚，暂且保留
-		removeBeing();
-		if(isEmpty()) {
-			Being = t;
-			return true;
-		}
-		else
-			return false;
 	}
 }

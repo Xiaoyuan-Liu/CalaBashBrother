@@ -1,4 +1,5 @@
 package java2018.CalabashBrother.Beings;
+/*
 enum NameAndColor {//
 	RED, ORANGE, YELLOW, GREEN, CYAN, BLUE, PURPLE;
 	String[] NAME = {"老大", "老二", "老三", "老四", "老五", "老六", "老七"};
@@ -10,7 +11,8 @@ enum NameAndColor {//
 		return this.COLOR[ordinal()];
 	}
 }
-public class CalabashBrother extends Creature{
+*/
+public class CalabashBrother extends Goodboy{
 	//private int x, y;
 	private NameAndColor nc;
 	//private int CE;//Combat Effectiveness
@@ -47,7 +49,9 @@ public class CalabashBrother extends Creature{
 	public String getColor() {
 		return nc.getColor();
 	}
-	
+	public NameAndColor getNameAndColor() {
+		return nc;
+	}
 	public void setNameAndColor(int index) {
 		nc = NameAndColor.values()[index];
 	}
