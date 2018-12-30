@@ -10,6 +10,7 @@ public class Creature extends Beings implements Runnable{
 	protected int CE;//Combat Effectiveness
 	protected int DEF;//Defence
 	protected int HP;//Health Point
+	protected int fullHP;
 	protected boolean Motivated;
 	protected boolean livingStatus;
 	protected BattleFields BFs;
@@ -19,6 +20,7 @@ public class Creature extends Beings implements Runnable{
 		this.CE = CE;
 		this.DEF = DEF;
 		this.HP = HP;
+		fullHP=HP;
 		Motivated = false;
 		livingStatus = true;
 	}
@@ -28,6 +30,7 @@ public class Creature extends Beings implements Runnable{
 		this.CE = CE;
 		this.DEF = DEF;
 		this.HP = HP;
+		fullHP=HP;
 		this.Motivated = Motivated;
 		livingStatus = true;
 	}
@@ -37,6 +40,7 @@ public class Creature extends Beings implements Runnable{
 		this.CE = CE;
 		this.DEF = DEF;
 		this.HP = HP;
+		fullHP=HP;
 		this.Motivated = Motivated;
 		livingStatus = true;
 		this.BFs = BFs;
@@ -51,6 +55,9 @@ public class Creature extends Beings implements Runnable{
 		synchronized(this){
 		return HP;
 		}
+	}
+	public int getFullHP() {
+		return fullHP;
 	}
 	public void setHP(int HP) {
 		synchronized(this){
@@ -72,6 +79,9 @@ public class Creature extends Beings implements Runnable{
 		if(HP<=0)
 			livingStatus = false;
 		return livingStatus;
+	}
+	public void killThread() {
+		livingStatus=false;
 	}
 	public synchronized void Attack(Creature attackedBeing) {
 		Attack(attackedBeing,1);
@@ -133,14 +143,14 @@ public class Creature extends Beings implements Runnable{
 					System.err.println(this.getClass().getName()+"move from("+this.x+","+this.y+")to("+(this.x-1)+","+this.y+")");
 					BFs.remove(x, y);
 					x=x-1;
-					y=y;
+					//y=y;
 					BFs.SetBFPosition(this.x, this.y, this);
 					break;
 				}
 				if(BFs.isEmpty(x, y-1)) {
 					System.err.println(this.getClass().getName()+"move from("+this.x+","+this.y+")to("+(this.x)+","+(this.y-1)+")");
 					BFs.remove(x, y);
-					x=x;
+					//x=x;
 					y=y-1;
 					BFs.SetBFPosition(this.x, this.y, this);
 					break;
@@ -151,7 +161,7 @@ public class Creature extends Beings implements Runnable{
 				if(BFs.isEmpty(x, y-1)) {
 					System.err.println(this.getClass().getName()+"move from("+this.x+","+this.y+")to("+(this.x)+","+(this.y-1)+")");
 					BFs.remove(x, y);
-					x=x;
+					//x=x;
 					y=y-1;
 					BFs.SetBFPosition(this.x, this.y, this);
 					break;
@@ -161,7 +171,7 @@ public class Creature extends Beings implements Runnable{
 					System.err.println(this.getClass().getName()+"move from("+this.x+","+this.y+")to("+(this.x-1)+","+(this.y)+")");
 					BFs.remove(x, y);
 					x=x-1;
-					y=y;
+					//y=y;
 					BFs.SetBFPosition(this.x, this.y, this);
 				}
 				break;
@@ -170,7 +180,7 @@ public class Creature extends Beings implements Runnable{
 				if(BFs.isEmpty(x, y-1)) {
 					System.err.println(this.getClass().getName()+"move from("+this.x+","+this.y+")to("+(this.x)+","+(this.y-1)+")");
 					BFs.remove(x, y);
-					x=x;
+					//x=x;
 					y=y-1;
 					BFs.SetBFPosition(this.x, this.y, this);
 					break;
@@ -180,7 +190,7 @@ public class Creature extends Beings implements Runnable{
 					System.err.println(this.getClass().getName()+"move from("+this.x+","+this.y+")to("+(this.x+1)+","+this.y+")");
 					BFs.remove(x, y);
 					x=x+1;
-					y=y;
+					//y=y;
 					BFs.SetBFPosition(this.x, this.y, this);
 				}
 				break;
@@ -190,7 +200,7 @@ public class Creature extends Beings implements Runnable{
 					System.err.println(this.getClass().getName()+"move from("+this.x+","+this.y+")to("+(this.x+1)+","+this.y+")");
 					BFs.remove(x, y);
 					x=x+1;
-					y=y;
+					//y=y;
 					
 					break;
 				}
@@ -198,7 +208,7 @@ public class Creature extends Beings implements Runnable{
 				if(BFs.SetBFPosition(x, y-1, this)) {
 					System.err.println(this.getClass().getName()+"move from("+this.x+","+this.y+")to("+(this.x)+","+(this.y-1)+")");
 					BFs.remove(x, y);
-					x=x;
+					//x=x;
 					y=y-1;
 					;
 				}
@@ -207,8 +217,8 @@ public class Creature extends Beings implements Runnable{
 				if(BFs.SetBFPosition(x+1, y, this)) {
 					System.err.println(this.getClass().getName()+"move from("+this.x+","+this.y+")to("+(this.x+1)+","+this.y+")");
 					BFs.remove(x, y);
-					this.x=x+1;
-					this.y=y;
+					x=x+1;
+					//y=y;
 					;
 					break;
 				}
@@ -216,18 +226,18 @@ public class Creature extends Beings implements Runnable{
 				if(BFs.SetBFPosition(x, y+1, this)) {
 					System.err.println(this.getClass().getName()+"move from("+this.x+","+this.y+")to("+(this.x)+","+(this.y+1)+")");
 					BFs.remove(x, y);
-					x=x;
+					//x=x;
 					y=y+1;
-					;
+					
 				}
 				break;
 			case 5:
 				if(BFs.SetBFPosition(this.x, this.y, this)) {
 					System.err.println(this.getClass().getName()+"move from("+this.x+","+this.y+")to("+(this.x)+","+(this.y+1)+")");
 					BFs.remove(this.x, this.y);
-					this.x=x;
-					this.y=y+1;
-					;
+					//x=x;
+					y=y+1;
+					
 					break;
 				}
 
@@ -235,17 +245,17 @@ public class Creature extends Beings implements Runnable{
 					System.err.println(this.getClass().getName()+"move from("+this.x+","+this.y+")to("+(this.x+1)+","+(this.y)+")");
 					BFs.remove(x, y);
 					x=x+1;
-					y=y;
-					;
+					//y=y;
+					
 				}
 				break;
 			case 6:
 				if(BFs.SetBFPosition(x, y+1, this)) {
 					System.err.println(this.getClass().getName()+"move from("+this.x+","+this.y+")to("+(this.x)+","+(this.y+1)+")");
 					BFs.remove(x, y);
-					x=x;
+					//x=x;
 					y=y+1;
-					;
+					
 					break;
 				}
 
@@ -253,8 +263,8 @@ public class Creature extends Beings implements Runnable{
 					System.err.println(this.getClass().getName()+"move from("+this.x+","+this.y+")to("+(this.x-1)+","+(this.y)+")");
 					BFs.remove(x, y);
 					x=x-1;
-					y=y;
-					;
+					//y=y;
+					
 				}
 				break;
 			case 7:
@@ -262,17 +272,17 @@ public class Creature extends Beings implements Runnable{
 					System.err.println(this.getClass().getName()+"move from("+this.x+","+this.y+")to("+(this.x-1)+","+this.y+")");
 					BFs.remove(x, y);
 					x=x-1;
-					y=y;
-					;
+					//y=y;
+					
 					break;
 				}
 
 				if(BFs.SetBFPosition(x, y-1, this)) {
 					System.err.println(this.getClass().getName()+"move from("+this.x+","+this.y+")to("+(this.x)+","+(this.y-1)+")");
 					BFs.remove(x, y);
-					x=x;
+					//x=x;
 					y=y-1;
-					;
+					
 				}
 				break;
 				/*

@@ -3,11 +3,10 @@ import java.util.*;
 import java2018.CalabashBrother.BattleField.*;
 import java2018.CalabashBrother.Beings.*;
 import java2018.CalabashBrother.Randomnum.*;
-import java2018.CalabashBrother.application.*;
-import java2018.CalabashBrother.GameGUI.*;
+//import java2018.CalabashBrother.application.*;
+//import java2018.CalabashBrother.GameGUI.*;
 public class Director {
-	private int goodboyCount = 8;
-	private int badboyCount = 0;
+	
 	private BattleFields BFs;
 	private CalabashBrothers CBs;
 	//private Monsters Ms;
@@ -392,7 +391,7 @@ public class Director {
 				MonsterList.add(new LouLuo());
 				formationName = new String("鹤翼");
 				//director.setFormation(x1, y1, "鹤翼", MonsterList);
-				badboyCount = 8;
+				//badboyCount = 8;
 				break;
 			
 			case 1:
@@ -404,7 +403,7 @@ public class Director {
 				MonsterList.add(new LouLuo());
 				MonsterList.add(new LouLuo());
 				formationName = new String("雁行");
-				badboyCount = 6;
+				//badboyCount = 6;
 				//director.setFormation(x1, y1, "雁行", MonsterList);
 				break;
 			case 2:
@@ -417,7 +416,7 @@ public class Director {
 				MonsterList.add(new LouLuo());
 				MonsterList.add(new LouLuo());
 				formationName = new String("衡轭");
-				badboyCount = 7;
+				//badboyCount = 7;
 				//director.setFormation(x1, y1, "衡轭", MonsterList);
 				break;
 		/*case 3:
@@ -444,7 +443,7 @@ public class Director {
 				MonsterList.add(new LouLuo());
 				MonsterList.add(new Scorpion());
 				formationName = new String("鱼鳞");
-				badboyCount = 11;
+				//badboyCount = 11;
 				//director.setFormation(x1, y1, "鱼鳞", MonsterList);
 				break;
 			case 4:
@@ -457,7 +456,7 @@ public class Director {
 				MonsterList.add(new LouLuo());
 				MonsterList.add(new LouLuo());
 				formationName = new String("方门");
-				badboyCount = 9;
+				//badboyCount = 9;
 				//director.setFormation(x1, y1, "方门", MonsterList);
 				break;
 			case 5:
@@ -481,7 +480,7 @@ public class Director {
 				MonsterList.add(new LouLuo());
 				MonsterList.add(new LouLuo());
 				formationName = new String("偃月");
-				badboyCount = 20;
+				//badboyCount = 20;
 				//director.setFormation(x1, y1, "偃月", MonsterList);
 				break;
 			case 6:
@@ -498,7 +497,7 @@ public class Director {
 				MonsterList.add(new LouLuo());
 				MonsterList.add(new LouLuo());
 				formationName = new String("锋矢");
-				badboyCount = 13;
+				//badboyCount = 13;
 				//director.setFormation(x1, y1, "锋矢", MonsterList);
 				break;
 			
@@ -527,7 +526,7 @@ public class Director {
 		//try{Thread.sleep(10000);
 		//}catch(InterruptedException e) {
 		//}
-	}
+	}/*
 	public static void main(String[] args) {
 		//BattleFields battlefields = new BattleFields();
 		Director director = new Director(new BattleFields(),new CalabashBrothers());//, new Monsters());
@@ -558,6 +557,7 @@ public class Director {
 		
 		//作业三
 		//葫芦娃以长蛇阵放在阵地中
+	/*
 		while(true) {
 			director.clearBattleField();
 		int x0,y0;
@@ -645,6 +645,7 @@ public class Director {
 			director.setFormation(x1, y1, "长蛇", MonsterList);
 			break;
 		*/
+	/*
 			case 3:
 				MonsterList.add(new LouLuo());
 				MonsterList.add(new LouLuo());
@@ -732,5 +733,5 @@ public class Director {
 
 		
 	}
-	
+	*/
 }

@@ -1,5 +1,5 @@
 package java2018.CalabashBrother.BattleField;
-import java.util.*;
+//import java.util.*;
 import java2018.CalabashBrother.Beings.*;
 public class BattleFields {//战场为M*N的矩形
 	//version 1.0
@@ -8,9 +8,10 @@ public class BattleFields {//战场为M*N的矩形
 	private int N;//战场的宽
 	private int goodboyCount;
 	private int badboyCount;
-	private  BattleField BFs[][];//????
+	private  BattleField<Creature> BFs[][];//????
 	//private ArrayList<BattleField<? extends Beings>> BF = new ArrayList<>();
 	//private T battleField[][];
+	@SuppressWarnings("unchecked")
 	public BattleFields(){
 		M = 10;
 		N = 20;
@@ -20,6 +21,7 @@ public class BattleFields {//战场为M*N的矩形
 		badboyCount = -1;
 
 	}
+	@SuppressWarnings("unchecked")
 	BattleFields(int m, int n){
 
 		M = m;

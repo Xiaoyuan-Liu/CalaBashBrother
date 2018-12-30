@@ -6,29 +6,38 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+//import java.util.concurrent.ExecutorService;
+//import java.util.concurrent.Executors;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import javafx.scene.paint.Color;
 import java2018.CalabashBrother.BattleField.BattleFields;
 import java2018.CalabashBrother.Beings.CalabashBrother;
 import java2018.CalabashBrother.Beings.CalabashBrothers;
+import java2018.CalabashBrother.Beings.Creature;
 import java2018.CalabashBrother.main.Director;
 import javafx.application.Platform;
-import javafx.event.EventHandler;
+//import javafx.event.EventHandler;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.TextField;
+//import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
-import javafx.scene.input.KeyEvent;
+//import javafx.scene.input.KeyEvent;
 
 public class MainCanvas extends Canvas{
+	private int goodboyCount = 8;
+	private int badboyCount = -1;
+	private boolean begin = false;
 	private BattleFields BFs;
 	private Director director;
 	private GraphicsContext gc;
 	private String fileName;
-	boolean play;
+	private boolean battleOver;
+	int play;
 	private FileWriter writer;
 	private  BufferedReader reader;
+	ExecutorService exec = Executors.newCachedThreadPool();
 	static Image BG;// = new Image(new File("C:\\Users\\13668\\Desktop\\background.jpg").toURI().toURL().toString());
 	
 	static Image CB1 = null;// = new Image(new File("C:\\Users\\13668\\Desktop\\1.jpg").toURI().toURL().toString());
@@ -62,40 +71,31 @@ public class MainCanvas extends Canvas{
 		}
 	}
 	
-	private boolean isRunning = true;
-	private long sleep = 100;
+	//private boolean isRunning = true;
+	//private long sleep = 100;
 	
 	private Thread thread = new Thread(new Runnable() {
 		
 		@Override
-		public void run() {
-			if(play)creatureThreadRun();
+		public void run(){
 			while(true) {
 				System.err.println("running "+play);
 				//draw();
 				//BFs.BFOutput();
 				Platform.runLater(()->{
-					if(play) {
+					if(play==1) {
+						if((goodboyCount==0)||(badboyCount==0)) {
+							System.err.println("goodboyCount:"+goodboyCount+" badboyCount:"+badboyCount);
+						}
+						else {
 						saveBattleField();
-					draw();
-					}
-					else
-						replay();
-					//BFs.BFOutput();
-					//System.err.println(" ");
-				});
-				/*
-				Platform.runLater(new Runnable() {
-					
-					@Override
-					public void run() {
 						draw();
-						//update();
-						BFs.BFOutput();
-						System.out.println(" ");
+						}
 					}
+					else if(play==0)
+						replay();
+
 				});
-				*/
 				try {
 					Thread.sleep(50);
 					
@@ -107,37 +107,27 @@ public class MainCanvas extends Canvas{
 	});
 	public MainCanvas() {
 		super(1000, 500+menuBarHeight);
-		play = true;
+		play = -1;
+		battleOver = true;
 		BFs=new BattleFields();
 		director = new Director(BFs,new CalabashBrothers());
 		gc = this.getGraphicsContext2D();
 		gc.drawImage(BG, 0, 0+menuBarHeight,1000,500);
-		/*gc.drawImage(CB1, 0, 0+menuBarHeight,50,50);
-		gc.drawImage(CB2, 50, 0+menuBarHeight,50,50);
-		gc.drawImage(CB3, 100, 0+menuBarHeight,50,50);
-		gc.drawImage(CB4, 150, 0+menuBarHeight,50,50);
-		gc.drawImage(CB5, 200, 0+menuBarHeight,50,50);
-		gc.drawImage(CB6, 250, 0+menuBarHeight,50,50);
-		gc.drawImage(CB7, 300, 0+menuBarHeight,50,50);
-		gc.drawImage(GP, 350, 0+menuBarHeight,50,50);
-		gc.drawImage(SC, 400, 0+menuBarHeight,50,50);
-		gc.drawImage(SN, 450, 0+menuBarHeight,50,50);
-		gc.drawImage(LL, 500, 0+menuBarHeight,50,50);
-		*/
+
+		
 		gc.setLineWidth(2);
 		
 		for(int i = 0; i <= 20; i++)
 			gc.strokeLine(50*i, 0+menuBarHeight, 50*i, 500+menuBarHeight);
 		for(int i = 0; i <= 10;i++)
 			gc.strokeLine(0, 50*i+menuBarHeight, 1000, 50*i+menuBarHeight);
-		
-
-
-		//thread.start();
-		//creatureThreadRun();
+		thread.start();
 	}
 	public void flashBegin() {
-		thread.start();
+		if((!begin)&&play==1) {
+			System.err.println("not begin and begin: "+begin);
+			creatureThreadRun();
+		}
 	}
 	public void drawBackground() {
 		gc.drawImage(BG, 0, 0+menuBarHeight,1000,500);
@@ -147,73 +137,116 @@ public class MainCanvas extends Canvas{
 			gc.strokeLine(0, 50*i+menuBarHeight, 1000, 50*i+menuBarHeight);
 	}
 	public void newWar() {
+		battleOver=false;
+		BFs=new BattleFields();
+		director = new Director(BFs,new CalabashBrothers());
 		director.setPos();
-		
 		draw();
 	}
 	public void draw() {
-			//String frontStr = "java2018.CalabashBrother.Beings.";
-			//gc.drawImage(BG, 0, 0+menuBarHeight,1000,500);
 		System.err.println("drawing");
-		
+		int newGoodboyCount = 0;
+		int newBadboyCount = 0;
 		gc.clearRect(0, 0, 1000, 500+menuBarHeight);
+		
+		//画背景
 		gc.drawImage(BG, 0, 0+menuBarHeight,1000,500);
-			for(int i = 0; i <= 20; i++)
-				gc.strokeLine(50*i, 0+menuBarHeight, 50*i, 500+menuBarHeight);
-			for(int i = 0; i <= 10;i++)
-				gc.strokeLine(0, 50*i+menuBarHeight, 1000, 50*i+menuBarHeight);
+		//画格子
+		//gc.setStroke(Color.BLACK);
+		for(int i = 0; i <= 20; i++)
+			gc.strokeLine(50*i, 0+menuBarHeight, 50*i, 500+menuBarHeight);
+		for(int i = 0; i <= 10;i++)
+			gc.strokeLine(0, 50*i+menuBarHeight, 1000, 50*i+menuBarHeight);
+		//画人物
+		for(int i = 0; i < 10;i++) {
+			for(int j = 0; j < 20;j++) {
+				if(BFs.isEmpty(i, j)||(!BFs.getCreature(i, j).isLiving()))continue;
+				if(((double)BFs.getCreature(i, j).getHP())/((double)BFs.getCreature(i, j).getFullHP())>0.7)
+					gc.setStroke(Color.LIGHTGREEN);
+				else if(((double)BFs.getCreature(i, j).getHP())/((double)BFs.getCreature(i, j).getFullHP())>0.4)
+					gc.setStroke(Color.YELLOW);
+				else
+					gc.setStroke(Color.RED);
+				gc.setLineWidth(8);
+				if((50*j+5)<=50*j-3+((double)BFs.getCreature(i, j).getHP())/((double)BFs.getCreature(i, j).getFullHP())*48) {
+					gc.strokeLine(50*j+5, 50*i+menuBarHeight, 50*j-3+((double)BFs.getCreature(i, j).getHP())/((double)BFs.getCreature(i, j).getFullHP())*48, 50*i+menuBarHeight);
+				}
+				else
+					gc.strokeLine(50*j+5, 50*i+menuBarHeight, 50*j+5+((double)BFs.getCreature(i, j).getHP())/((double)BFs.getCreature(i, j).getFullHP())*48, 50*i+menuBarHeight);
+
+				gc.setStroke(Color.BLACK);
+				gc.setLineWidth(2);
+				switch(BFs.creatureType(i, j)) {
+				case "java2018.CalabashBrother.Beings.CalabashBrother":
+					newGoodboyCount++;
+					switch(BFs.CBName(i, j)) {
+					case "老大":
+						gc.drawImage(CB1, 50*j+1, 50*i+menuBarHeight+1,48,48);
+						break;
+					case "老二":
+						gc.drawImage(CB2, 50*j+1, 50*i+menuBarHeight+1,48,48);
+						break;
+					case "老三":
+						gc.drawImage(CB3, 50*j+1, 50*i+menuBarHeight+1,48,48);
+						break;
+					case "老四":
+						gc.drawImage(CB4, 50*j+1, 50*i+menuBarHeight+1,48,48);
+						break;
+					case "老五":
+						gc.drawImage(CB5, 50*j+1, 50*i+menuBarHeight+1,48,48);
+						break;
+					case "老六":
+						gc.drawImage(CB6, 50*j+1, 50*i+menuBarHeight+1,48,48);
+						break;
+					case "老七":
+						gc.drawImage(CB7, 50*j+1, 50*i+menuBarHeight+1,48,48);
+						break;
+					}					
+					break;
+				case "java2018.CalabashBrother.Beings.GrandPa":
+					newGoodboyCount++;
+					gc.drawImage(GP, 50*j+1, 50*i+menuBarHeight+1,48,48);
+					break;
+				case "java2018.CalabashBrother.Beings.LouLuo":
+					if(goodboyCount==0)
+						BFs.getCreature(i, j).killThread();;
+					newBadboyCount++;
+					gc.drawImage(LL, 50*j+1, 50*i+menuBarHeight+2,48,48);
+					break;
+				case "java2018.CalabashBrother.Beings.Snake":
+					newBadboyCount++;
+					gc.drawImage(SN, 50*j+1, 50*i+menuBarHeight+1,48,48);
+					break;
+				case "java2018.CalabashBrother.Beings.Scorpion":
+					newBadboyCount++;
+					gc.drawImage(SC, 50*j+1, 50*i+menuBarHeight+1,48,48);
+					break;
+				}
+			}
+		}
+		goodboyCount = newGoodboyCount;
+		badboyCount = newBadboyCount;
+		if(goodboyCount==0||badboyCount==0) {
 			for(int i = 0; i < 10;i++) {
 				for(int j = 0; j < 20;j++) {
 					if(BFs.isEmpty(i, j)||(!BFs.getCreature(i, j).isLiving()))continue;
-					switch(BFs.creatureType(i, j)) {
-					case "java2018.CalabashBrother.Beings.CalabashBrother":
-						switch(BFs.CBName(i, j)) {
-						case "老大":
-							gc.drawImage(CB1, 50*j+1, 50*i+menuBarHeight+1,48,48);
-							break;
-						case "老二":
-							gc.drawImage(CB2, 50*j+1, 50*i+menuBarHeight+1,48,48);
-							break;
-						case "老三":
-							gc.drawImage(CB3, 50*j+1, 50*i+menuBarHeight+1,48,48);
-							break;
-						case "老四":
-							gc.drawImage(CB4, 50*j+1, 50*i+menuBarHeight+1,48,48);
-							break;
-						case "老五":
-							gc.drawImage(CB5, 50*j+1, 50*i+menuBarHeight+1,48,48);
-							break;
-						case "老六":
-							gc.drawImage(CB6, 50*j+1, 50*i+menuBarHeight+1,48,48);
-							break;
-						case "老七":
-							gc.drawImage(CB7, 50*j+1, 50*i+menuBarHeight+1,48,48);
-							break;
-						}
-						
-						
-						
-						
-						break;
-					case "java2018.CalabashBrother.Beings.GrandPa":
-						gc.drawImage(GP, 50*j+1, 50*i+menuBarHeight+1,48,48);
-						break;
-					case "java2018.CalabashBrother.Beings.LouLuo":
-						gc.drawImage(LL, 50*j+1, 50*i+menuBarHeight+2,48,48);
-						break;
-					case "java2018.CalabashBrother.Beings.Snake":
-						gc.drawImage(SN, 50*j+1, 50*i+menuBarHeight+1,48,48);
-						break;
-					case "java2018.CalabashBrother.Beings.Scorpion":
-						gc.drawImage(SC, 50*j+1, 50*i+menuBarHeight+1,48,48);
-						break;
-					}
+					else
+						BFs.getCreature(i, j).killThread();
 				}
 			}
-		
+			setPlay(-1);
+			battleOver=true;
+		}
+			
+	}
+	public boolean isBattleOver() {
+		return battleOver;
 	}
 	public void creatureThreadRun() {
+		begin = true;
+		battleOver=false;
 		BattleFields BFs= director.getBFs();
+		
 		gc.clearRect(0, 0, 1000, 500+menuBarHeight);
 		gc.drawImage(BG, 0, 0+menuBarHeight,1000,500);
 			for(int i = 0; i <= 20; i++)
@@ -224,16 +257,23 @@ public class MainCanvas extends Canvas{
 		for(int i = 0; i < 10;i++) {
 			for(int j = 0;j<20;j++) {
 				if(!BFs.isEmpty(i, j)) {
-					Thread th = new Thread(BFs.getCreature(i, j));
-					th.setDaemon(true);
-					th.start();
+					Creature createExec = BFs.getCreature(i, j);
+					exec.execute(createExec);
+					//Thread th = new Thread(BFs.getCreature(i, j));
+					//th.setDaemon(true);
+					//th.start();
 					//exec.execute(BFs.getCreature(i, j));
 				}
 			}
 		}
 		//exec.shutdown();
 	}
-	public void setPlay(boolean play) {
+	public void setPlay(int play) {
+		System.err.println(this.play);
+		if(this.play==-1) {
+			System.err.println("------------begin set false-------------");
+			begin = false;
+		}
 		this.play=play;
 		System.err.println(play);
 	}
@@ -249,20 +289,6 @@ public class MainCanvas extends Canvas{
 	}
 	public void replay() {
 		System.err.println("replaying");
-		//this.saveBattleField("1.txt");
-		/*
-		for(int i = 0;i<10;i++) {
-			String line=null;
-			try {
-				if((line = reader.readLine())!=null)
-					System.err.println(line);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-		}
-		*/
 			gc.clearRect(0, 0, 1000, 500+menuBarHeight);
 			gc.drawImage(BG, 0, 0+menuBarHeight,1000,500);
 			for(int i = 0; i <= 20; i++)

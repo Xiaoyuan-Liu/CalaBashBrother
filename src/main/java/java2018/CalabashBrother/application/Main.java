@@ -6,34 +6,35 @@ import java.util.Date;
 
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.beans.property.DoubleProperty;
+//import javafx.beans.property.DoubleProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import javafx.scene.Parent;
+//import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Label;
+//import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
+//import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.Background;
+//import javafx.scene.layout.Background;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.geometry.Rectangle2D; 
+//import javafx.scene.layout.HBox;
+//import javafx.geometry.Rectangle2D; 
 import java2018.CalabashBrother.BattleField.*;
 import java2018.CalabashBrother.Beings.*;
 import java2018.CalabashBrother.main.Director;
 public class Main extends Application {
-	Director director = new Director(new BattleFields(), new CalabashBrothers());
+	private int play;
+	//Director director = new Director(new BattleFields(), new CalabashBrothers());
 	static Image BG;// = new Image(new File("C:\\Users\\13668\\Desktop\\background.jpg").toURI().toURL().toString());
 	
 	static Image CB1 = null;// = new Image(new File("C:\\Users\\13668\\Desktop\\1.jpg").toURI().toURL().toString());
@@ -71,10 +72,13 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			//响应空格
+			//自动建立文件保存当前对局
+			play = -1;
 			SimpleDateFormat df = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss");//设置日期格式
-	          System.out.println(df.format(new Date()));// new Date()为获取当前系统时间
-	          String fileName=df.format(new Date())+".txt";
+	        System.out.println(df.format(new Date()));// new Date()为获取当前系统时间
+	        String fileName=df.format(new Date())+".txt";
+	        
+	        /*
 			TextField tf = new TextField();
 			tf.setOnKeyReleased(new EventHandler<KeyEvent>() {
 				public void handle(KeyEvent event) {
@@ -84,7 +88,7 @@ public class Main extends Application {
 					System.err.println("event.getCode()="+event.getCode());
 				}
 			});
-			
+			*/
 			
 			BorderPane root = new BorderPane();
 			MainCanvas canvas=new MainCanvas();
@@ -95,22 +99,20 @@ public class Main extends Application {
 			MenuItem newMenuItem = new MenuItem("历史对局");
 		    newMenuItem.setOnAction(new EventHandler<ActionEvent>() {
 		    	public void handle(ActionEvent arg0) {
-		    		
+		    		play=0;
 		    		FileChooser fileChooser1 = new FileChooser();
 		    		fileChooser1.setTitle("Open");
 		    		File file = fileChooser1.showOpenDialog(primaryStage);
 		    		canvas.setFileName(file.getAbsolutePath());
-		    		canvas.setPlay(false);
-		    		//canvas.readBattleFields(file.getAbsolutePath());
+		    		canvas.setPlay(-1);
 		    	}
 		    });
 		    MenuItem saveMenuItem = new MenuItem("新对局");
 		    saveMenuItem.setOnAction(new EventHandler<ActionEvent>() {
 		    	public void handle(ActionEvent arg0) {
+		    		play=1;
+		    		canvas.setPlay(-1);
 		    		canvas.newWar();
-		    		//FileChooser fileChooser1 = new FileChooser();
-		    		//fileChooser1.setTitle("new");
-		    		//File file = fileChooser1.showSaveDialog(primaryStage);
 		    	}
 		    });
 		    
@@ -124,32 +126,7 @@ public class Main extends Application {
 		            new SeparatorMenuItem(), exitMenuItem);
 
 			menuBar.getMenus().add(fileMenu);
-			/*
-			//Canvas 
-			canvas = new Canvas(1000, 500+menuBarHeight);
-			//GraphicsContext 
-			gc = canvas.getGraphicsContext2D();
-			//root.setCenter(pictureRegion);
-			*/
-			
 			System.out.println(menuBar.getWidth());
-			/*
-			gc.drawImage(BG, 0, 0+menuBarHeight,1000,500);
-			gc.drawImage(CB1, 0, 0+menuBarHeight,50,50);
-			gc.drawImage(CB2, 50, 0+menuBarHeight,50,50);
-			gc.drawImage(CB3, 100, 0+menuBarHeight,50,50);
-			gc.drawImage(CB4, 150, 0+menuBarHeight,50,50);
-			gc.drawImage(CB5, 200, 0+menuBarHeight,50,50);
-			gc.drawImage(CB6, 250, 0+menuBarHeight,50,50);
-			gc.drawImage(CB7, 300, 0+menuBarHeight,50,50);
-			gc.drawImage(GP, 350, 0+menuBarHeight,50,50);
-			gc.drawImage(SC, 400, 0+menuBarHeight,50,50);
-			gc.drawImage(SN, 450, 0+menuBarHeight,50,50);
-			gc.drawImage(LL, 500, 0+menuBarHeight,50,50);
-			
-			gc.setLineWidth(2);
-			*/
-			
 			
 			root.getChildren().add(canvas);
 			canvas.drawBackground();
@@ -160,10 +137,15 @@ public class Main extends Application {
 			
 			Scene scene = new Scene(root,1000,500+menuBarHeight);
 			//scene.addEventHandler(eventType, eventHandler);
+			//键盘事件
 			scene.addEventHandler(KeyEvent.KEY_RELEASED, new EventHandler<KeyEvent>() {
 				public void handle(KeyEvent event) {
-					if(event.getCode()==KeyCode.SPACE) {
-						canvas.flashBegin();
+					if(event.getCode()==KeyCode.SPACE&&canvas!=null) {
+						System.err.println("*************"+canvas.play+"***************"+play+"*************");
+						if(!(canvas.isBattleOver()&&(play==1))) {
+							canvas.setPlay(play);
+							canvas.flashBegin();
+						}
 						//canvas.creatureThreadRun();
 					}
 					System.err.println("setOnKeyReleased=");
@@ -175,27 +157,9 @@ public class Main extends Application {
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.setScene(scene);
 			primaryStage.show();
-			//while(true) {
-			//primaryStage.show();
-			//try {
-			//	Thread.sleep(10000);
-				
-			//}catch(InterruptedException e) {
-			//	e.printStackTrace();
-			//}
-			//}
-			//gc.drawImage(GP, 600, 0+menuBarHeight,50,50);
-			//while(true) {
-			//	director.setPos();
-			//	showBF(director.getBFs());
-			//	primaryStage.show();
-			//}
 		} catch(Exception e) {
 			e.printStackTrace();
-		}//
-		//while(true) {
-			
-		//}
+		}
 	}
 	
 	public static void main(String[] args) {
