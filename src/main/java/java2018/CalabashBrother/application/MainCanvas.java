@@ -16,7 +16,7 @@ import java2018.CalabashBrother.BattleField.BattleFields;
 import java2018.CalabashBrother.Beings.CalabashBrother;
 import java2018.CalabashBrother.Beings.CalabashBrothers;
 import java2018.CalabashBrother.Beings.Creature;
-import java2018.CalabashBrother.main.Director;
+import java2018.CalabashBrother.Director.*;
 import javafx.application.Platform;
 //import javafx.event.EventHandler;
 import javafx.scene.canvas.Canvas;
@@ -352,6 +352,7 @@ public class MainCanvas extends Canvas{
 		//}
 	}
 	public void saveBattleField() {
+		System.err.println(fileName);
 		try {
 			//打开写文件器，第二个参数表示为append
 			writer = new FileWriter(fileName,true);

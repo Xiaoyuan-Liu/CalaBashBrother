@@ -11,7 +11,7 @@ import java2018.CalabashBrother.Beings.Scorpion;
 import java2018.CalabashBrother.Beings.Snake;
 import java2018.CalabashBrother.Randomnum.Randomnum;
 import java2018.CalabashBrother.application.Main;
-import java2018.CalabashBrother.main.Director;
+import java2018.CalabashBrother.Director.*;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;

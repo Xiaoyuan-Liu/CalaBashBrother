@@ -75,9 +75,6 @@ public class BattleFields {//战场为M*N的矩形
 	}
 	public boolean SetBFPosition(int x, int y, Creature t) {
 		synchronized(BattleFields.class){
-		//	if(BFs[x][y]==null)System.err.println("NullPointer");
-		//if((!(BFs[x][y]==null))||(!BFs[x][y].isEmpty()))return false;
-		
 		if(!isEmpty(x,y))return false;
 		else {
 			BFs[x][y]=new BattleField<Creature>(t);
@@ -88,8 +85,9 @@ public class BattleFields {//战场为M*N的矩形
 	}
 	public void remove(int x, int y) {
 		synchronized(BattleFields.class){
-		BFs[x][y]=null;
-	}}
+			BFs[x][y]=null;
+		}
+	}
 	public int findDirection(Creature c,int x, int y) {
 		for(int i = 1;i<=28;i++) {
 			for(int j = (i+1)/2; j <= i;j++) {

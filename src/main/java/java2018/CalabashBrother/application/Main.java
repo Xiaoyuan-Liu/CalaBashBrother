@@ -13,15 +13,15 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 //import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
+//import javafx.scene.canvas.Canvas;
+//import javafx.scene.canvas.GraphicsContext;
 //import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
-import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
+//import javafx.scene.control.TextField;
+//import javafx.scene.image.Image;
 //import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -29,14 +29,15 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 //import javafx.scene.layout.HBox;
 //import javafx.geometry.Rectangle2D; 
-import java2018.CalabashBrother.BattleField.*;
-import java2018.CalabashBrother.Beings.*;
-import java2018.CalabashBrother.main.Director;
+//import java2018.CalabashBrother.BattleField.*;
+//import java2018.CalabashBrother.Beings.*;
+//import java2018.CalabashBrother.Director.*;
 public class Main extends Application {
 	private int play;
+	static int menuBarHeight = 35;
 	//Director director = new Director(new BattleFields(), new CalabashBrothers());
+	/*
 	static Image BG;// = new Image(new File("C:\\Users\\13668\\Desktop\\background.jpg").toURI().toURL().toString());
-	
 	static Image CB1 = null;// = new Image(new File("C:\\Users\\13668\\Desktop\\1.jpg").toURI().toURL().toString());
 	static Image CB2 = null;
 	static Image CB3 = null;
@@ -48,7 +49,7 @@ public class Main extends Application {
 	static Image LL = null;
 	static Image SC = null;
 	static Image SN = null;
-	static int menuBarHeight = 35;
+	
 	static {
 		try {
 			BG = new Image(new File("resource/background.jpg").toURI().toURL().toString());
@@ -66,9 +67,9 @@ public class Main extends Application {
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
-	}
-	Canvas canvas = null;
-	GraphicsContext gc = null;
+	}*/
+	//Canvas canvas = null;
+	//GraphicsContext gc = null;
 	@Override
 	public void start(Stage primaryStage) {
 		try {
@@ -110,7 +111,11 @@ public class Main extends Application {
 		    MenuItem saveMenuItem = new MenuItem("新对局");
 		    saveMenuItem.setOnAction(new EventHandler<ActionEvent>() {
 		    	public void handle(ActionEvent arg0) {
+		    		SimpleDateFormat df = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss");//设置日期格式
+			        System.out.println(df.format(new Date()));// new Date()为获取当前系统时间
+			        String fileName=df.format(new Date())+".txt";
 		    		play=1;
+		    		canvas.setFileName(fileName);
 		    		canvas.setPlay(-1);
 		    		canvas.newWar();
 		    	}
